@@ -1,0 +1,522 @@
+@import "tailwindcss";
+
+/* ============================================================
+   DESIGN TOKENS
+   Tailwind CSS v4 — every token below becomes a utility,
+   e.g. --color-purple  ->  bg-purple / text-purple / border-purple
+   ============================================================ */
+@theme {
+  /* -- Typography ------------------------------------------ */
+  --font-sans:
+    "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas,
+    "Liberation Mono", monospace;
+
+  /* -- Surfaces -------------------------------------------- */
+  /* requested palette: bg #0B1020, cards + navigation #111827 */
+  --color-background: #0b1020;
+  --color-surface: #111827;
+  --color-surface-2: #1a2438; /* nested panels */
+  --color-surface-3: #222e45; /* hover / active */
+  --color-border: #263247;
+  --color-border-strong: #36435c;
+
+  /* -- Text ------------------------------------------------ */
+  --color-foreground: #f8fafc;
+  --color-muted: #94a3b8;
+  --color-subtle: #8695ad; /* micro-labels — still AA on surface-2 */
+
+  /* -- Accents --------------------------------------------- */
+  /* Token names are kept (components reference them) but now hold the
+     requested palette:  purple*  = PRIMARY accent (#3B82F6, blue)
+                         blue*    = SECONDARY accent (#A78BFA, violet)
+     The -light/-dark/-deep variants are tints that keep text and hovers
+     readable on the dark surfaces. */
+  --color-purple: #3b82f6;
+  --color-purple-light: #60a5fa;
+  --color-purple-dark: #2563eb;
+  --color-blue: #a78bfa;
+  --color-blue-light: #c4b5fd;
+  --color-blue-deep: #8b5cf6;
+
+  /* -- Status ---------------------------------------------- */
+  --color-danger: #f87171;
+
+  /* -- Radii ----------------------------------------------- */
+  --radius-xs: 0.375rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.5rem;
+
+  /* -- Elevation ------------------------------------------- */
+  --shadow-card:
+    0 1px 0 0 rgb(255 255 255 / 0.03) inset,
+    0 24px 48px -30px rgb(0 0 0 / 0.9);
+  --shadow-glow-purple: 0 18px 44px -16px rgb(59 130 246 / 0.7);
+
+  /* -- Motion ---------------------------------------------- */
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-pulse-glow: pulse-glow 4s ease-in-out infinite;
+
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-14px);
+    }
+  }
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      opacity: 0.5;
+    }
+    50% {
+      opacity: 0.9;
+    }
+  }
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    min-height: 100vh;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Ambient aurora behind every page — subtle, fixed, cheap */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(
+        60rem 40rem at 12% -10%,
+        rgb(59 130 246 / 0.2),
+        transparent 60%
+      ),
+      radial-gradient(
+        50rem 34rem at 95% 4%,
+        rgb(167 139 250 / 0.16),
+        transparent 55%
+      ),
+      radial-gradient(
+        42rem 30rem at 50% 112%,
+        rgb(59 130 246 / 0.12),
+        transparent 62%
+      );
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--color-foreground);
+    text-wrap: balance;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-purple) 42%, transparent);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-purple-light);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+
+  /* Dark custom scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border-strong) var(--color-background);
+  }
+  ::-webkit-scrollbar {
+    width: 11px;
+    height: 11px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-background);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border: 3px solid var(--color-background);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-border-strong);
+  }
+}
+
+/* ============================================================
+   COMPONENT SYSTEM
+   ============================================================ */
+@layer components {
+  /* -- Layout ---------------------------------------------- */
+  .container-page {
+    width: 100%;
+    max-width: 76rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 640px) {
+    .container-page {
+      padding-inline: 1.75rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .container-page {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  /* -- Skip link (keyboard users) -------------------------- */
+  .skip-link {
+    position: fixed;
+    top: 0.75rem;
+    left: 50%;
+    z-index: 100;
+    padding: 0.65rem 1.15rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface-2);
+    color: var(--color-foreground);
+    font-size: 0.875rem;
+    font-weight: 600;
+    box-shadow: var(--shadow-card);
+    transform: translate(-50%, calc(-100% - 1.5rem));
+    transition: transform 0.2s var(--ease-out-expo);
+  }
+  .skip-link:focus {
+    transform: translate(-50%, 0);
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-purple-light);
+  }
+  .eyebrow::before {
+    content: "";
+    width: 1.75rem;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      var(--color-purple),
+      var(--color-blue)
+    );
+  }
+
+  /* -- Buttons --------------------------------------------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.55rem;
+    padding: 0.8rem 1.4rem;
+    border: 1px solid transparent;
+    border-radius: 0.85rem;
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    transition:
+      transform 0.28s var(--ease-out-expo),
+      box-shadow 0.32s ease,
+      background-color 0.32s ease,
+      background-position 0.6s ease,
+      border-color 0.32s ease,
+      color 0.32s ease,
+      opacity 0.32s ease;
+  }
+  .btn:active {
+    transform: translateY(1px) scale(0.99);
+  }
+  .btn:disabled,
+  .btn[aria-disabled="true"] {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .btn-primary {
+    color: #ffffff;
+    background-image: linear-gradient(
+      135deg,
+      #3b82f6 0%,
+      #2563eb 38%,
+      #1d4ed8 100%
+    );
+    background-size: 180% 180%;
+    background-position: 0% 50%;
+    box-shadow:
+      0 12px 34px -14px rgb(59 130 246 / 0.7),
+      inset 0 1px 0 rgb(255 255 255 / 0.18);
+  }
+  .btn-primary:hover {
+    background-position: 100% 50%;
+    transform: translateY(-2px);
+    box-shadow:
+      0 20px 46px -14px rgb(59 130 246 / 0.8),
+      inset 0 1px 0 rgb(255 255 255 / 0.26);
+  }
+
+  .btn-secondary {
+    color: var(--color-foreground);
+    background-color: color-mix(in oklab, var(--color-surface-2) 82%, transparent);
+    border-color: var(--color-border-strong);
+    backdrop-filter: blur(8px);
+  }
+  .btn-secondary:hover {
+    transform: translateY(-2px);
+    background-color: var(--color-surface-3);
+    border-color: color-mix(in oklab, var(--color-purple) 55%, var(--color-border-strong));
+    box-shadow: 0 16px 40px -22px rgb(59 130 246 / 0.7);
+  }
+
+  .btn-ghost {
+    color: var(--color-muted);
+  }
+  .btn-ghost:hover {
+    color: var(--color-foreground);
+    background-color: color-mix(in oklab, var(--color-surface-2) 70%, transparent);
+  }
+
+  .btn-sm {
+    padding: 0.55rem 1rem;
+    font-size: 0.85rem;
+    border-radius: 0.7rem;
+  }
+  .btn-lg {
+    padding: 1rem 1.75rem;
+    font-size: 1rem;
+    border-radius: 1rem;
+  }
+
+  /* -- Cards ----------------------------------------------- */
+  .card {
+    position: relative;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    background-image: linear-gradient(
+      180deg,
+      color-mix(in oklab, var(--color-surface-2) 65%, transparent),
+      var(--color-surface)
+    );
+    box-shadow: var(--shadow-card);
+    transition:
+      transform 0.4s var(--ease-out-expo),
+      border-color 0.4s ease,
+      box-shadow 0.4s ease;
+  }
+  .card-hover:hover {
+    transform: translateY(-4px);
+    border-color: color-mix(in oklab, var(--color-purple) 42%, var(--color-border));
+    box-shadow:
+      0 1px 0 0 rgb(255 255 255 / 0.05) inset,
+      0 32px 64px -32px rgb(59 130 246 / 0.4);
+  }
+  .card-hover::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    background: linear-gradient(
+      135deg,
+      color-mix(in oklab, var(--color-purple) 80%, transparent),
+      transparent 42%,
+      transparent 58%,
+      color-mix(in oklab, var(--color-blue) 80%, transparent)
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+  .card-hover:hover::after {
+    opacity: 1;
+  }
+
+  /* -- Badges ---------------------------------------------- */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.32rem 0.7rem;
+    border: 1px solid var(--color-border);
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--color-muted);
+    background-color: color-mix(in oklab, var(--color-surface-3) 65%, transparent);
+  }
+  .badge-accent {
+    color: var(--color-purple-light);
+    border-color: color-mix(in oklab, var(--color-purple) 42%, transparent);
+    background-color: color-mix(in oklab, var(--color-purple) 12%, transparent);
+  }
+  .badge-blue {
+    color: var(--color-blue-light);
+    border-color: color-mix(in oklab, var(--color-blue) 42%, transparent);
+    background-color: color-mix(in oklab, var(--color-blue) 12%, transparent);
+  }
+
+  /* -- Tech chip: badge + brand-tinted hover (see `--chip`) --- */
+  .chip {
+    transition:
+      transform 0.3s var(--ease-out-expo),
+      color 0.3s ease,
+      border-color 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+  .chip:hover,
+  .chip:focus-visible {
+    transform: translateY(-2px);
+    color: var(--color-foreground);
+    border-color: var(--chip, var(--color-border-strong));
+    box-shadow:
+      0 14px 30px -20px var(--chip, rgba(59, 130, 246, 0.9)),
+      inset 0 1px 0 rgb(255 255 255 / 0.06);
+  }
+
+  /* -- Icon button (social links, etc.) -------------------- */
+  .icon-btn {
+    display: inline-grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    color: var(--color-muted);
+    background-color: color-mix(in oklab, var(--color-surface-2) 55%, transparent);
+    transition:
+      transform 0.25s var(--ease-out-expo),
+      color 0.25s ease,
+      border-color 0.25s ease,
+      background-color 0.25s ease;
+  }
+  .icon-btn:hover {
+    transform: translateY(-2px);
+    color: var(--color-foreground);
+    background-color: var(--color-surface-3);
+    border-color: color-mix(in oklab, var(--color-purple) 55%, var(--color-border));
+  }
+
+  /* -- Form fields (inputs, textarea) ---------------------- */
+  .field {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    background-color: var(--color-surface-2);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    transition:
+      border-color 0.25s ease,
+      box-shadow 0.25s ease,
+      background-color 0.25s ease;
+  }
+  .field::placeholder {
+    color: var(--color-subtle);
+  }
+  .field:hover {
+    border-color: var(--color-border-strong);
+  }
+  .field:focus {
+    outline: none;
+    border-color: color-mix(in oklab, var(--color-purple) 70%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-purple) 22%, transparent);
+  }
+  .field[aria-invalid="true"] {
+    border-color: color-mix(in oklab, var(--color-danger) 65%, transparent);
+  }
+  .field[aria-invalid="true"]:focus {
+    border-color: color-mix(in oklab, var(--color-danger) 80%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-danger) 20%, transparent);
+  }
+  textarea.field {
+    resize: vertical;
+    min-height: 8.5rem;
+  }
+}
+
+/* ============================================================
+   UTILITIES
+   ============================================================ */
+@utility text-gradient {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-purple-light) 0%,
+    var(--color-blue-light) 55%,
+    var(--color-blue) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+@utility bg-grid {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* ============================================================
+   ACCESSIBILITY
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
