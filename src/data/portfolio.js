@@ -75,7 +75,7 @@ export const profile = {
       path that starts with "/", e.g. avatar: "/images/profile.jpg".
       If the file can't be loaded, the built-in initials placeholder is shown
       automatically, so there is never a broken image. */
-  avatar: "/images/kk.jpg",
+  avatar: `${import.meta.env.BASE_URL}images/kk.jpg`,
 
   /** Your CV / résumé. Put the file in the /public folder and use a path that
       starts with "/", e.g. cv: "/cv.pdf".
