@@ -1,0 +1,16 @@
+# Netlify deployment settings.
+# The GitHub Pages workflow does not read this file, so it stays untouched.
+
+[build]
+  # Deploy at a root domain, so the app must not use the /my-portfolio/ base path.
+  command = "npm run build -- --base=/"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Single-page app: serve index.html for any path that has no matching file.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
