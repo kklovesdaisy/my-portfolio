@@ -80,7 +80,11 @@ provider). Without a domain, use the default `*.github.io` / `*.vercel.app` URL.
 ### On Vercel / Netlify
 
 Add the domain in the project's **Domains** settings and follow the CNAME /
-A-record instructions shown there. HTTPS is issued automatically.
+A-record instructions shown there. HTTPS is issued automatically. The base path
+is already `/` for these hosts, so nothing else changes.
 
-> **Important:** after adding a custom domain, keep the base path as `/`. If you
-> switch to a subfolder URL again, update `base` in `vite.config.js` accordingly.
+> **Important:** a custom domain serves the site at its **root**, not at
+> `/my-portfolio/`. So if you add a custom domain to **GitHub Pages**, change
+> `base: "/my-portfolio/"` to `base: "/"` in `vite.config.js`, then commit and
+> push. The default `/my-portfolio/` is only for the
+> `kklovesdaisy.github.io/my-portfolio/` subfolder URL.
