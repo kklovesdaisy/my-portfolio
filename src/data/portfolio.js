@@ -22,7 +22,7 @@
  *  navItems    the links in the top navigation bar
  *  hero        the greeting and headline at the top of the page
  *  about       the "About Me" text, quick facts and info cards
- *  skills      the "Technical Skills" categories
+ *  skills      the "Skills & Abilities" grid
  *  education   the "Education" timeline entries
  *  projects    the "Featured Projects" cards
  *  contact     the "Contact" section copy
@@ -188,71 +188,43 @@ export const about = {
 };
 
 /* ============================================================================
-   SKILLS  —  the "Technical Skills" section
-   No skill percentages and no expert-level claims. Each category is labelled
-   honestly as "used in studies/projects", "learning", or "exploring".
-   `color` is the brand colour of the little dot next to each technology.
+   SKILLS  —  the "Skills & Abilities" grid
+   One unified list of the technologies you actually use. Each card shows a
+   brand logo above the skill name — no percentages, no expert-level claims.
+
+   `icon` matches a slug in src/components/TechIcons.jsx:
+     php, laravel, react, javascript, html5, css3, tailwindcss, mysql, github,
+     vite, postman, figma, git
+   Add, remove, or reorder items freely — the grid renders itself.
    ============================================================================ */
 export const skills = {
+  eyebrow: "02 — Skills",
+
+  /** The single section heading, centred above the grid. */
+  heading: "Skills & Abilities",
+
   intro:
     "The technologies I am learning and using in my studies and personal projects. This is a learning record rather than a rating — I am always growing in each of these.",
 
-  /** Shown at the end of the section. */
-  disclaimer:
+  /** Shown under the grid. */
+  footnote:
     "Listed as learning and hands-on use — no skill percentages, no expert claims.",
 
-  /* `icon` is one of: "code", "book", "database", "tool", "spark". */
-  categories: [
-    {
-      key: "frontend",
-      icon: "code",
-      tone: "purple",
-      title: "Frontend",
-      status: "Using in my studies",
-      note: "Front-end technologies I use to build interfaces.",
-      items: [
-        { name: "HTML & CSS", color: "#e34f26" },
-        { name: "JavaScript", color: "#f7df1e" },
-        { name: "React.js", color: "#61dafb" },
-        { name: "Tailwind CSS", color: "#38bdf8" },
-        { name: "React Native", color: "#61dafb" },
-      ],
-    },
-    {
-      key: "backend",
-      icon: "book",
-      tone: "blue",
-      title: "Backend",
-      status: "Learning",
-      note: "Server-side development I am studying.",
-      items: [
-        { name: "PHP", color: "#777bb4" },
-        { name: "Laravel", color: "#ff2d20" },
-        { name: "Node.js", color: "#3c873a" },
-      ],
-    },
-    {
-      key: "database",
-      icon: "database",
-      tone: "purple",
-      title: "Database",
-      status: "Learning",
-      note: "Storing and querying data.",
-      items: [{ name: "MySQL", color: "#4479a1" }],
-    },
-    {
-      key: "tools",
-      icon: "tool",
-      tone: "blue",
-      title: "Tools & Other Technologies",
-      status: "Everyday use",
-      note: "Tracking changes, collaborating, and writing code.",
-      items: [
-        { name: "Git", color: "#f05032" },
-        { name: "GitHub", color: "#ffffff" },
-        { name: "C#", color: "#239120" },
-      ],
-    },
+  /* `icon` matches a slug in src/components/TechIcons.jsx. */
+  items: [
+    { name: "PHP", icon: "php" },
+    { name: "Laravel", icon: "laravel" },
+    { name: "React.js", icon: "react" },
+    { name: "JavaScript", icon: "javascript" },
+    { name: "HTML5", icon: "html5" },
+    { name: "CSS3", icon: "css3" },
+    { name: "Tailwind CSS", icon: "tailwindcss" },
+    { name: "MySQL", icon: "mysql" },
+    { name: "GitHub", icon: "github" },
+    { name: "Vite", icon: "vite" },
+    { name: "Postman", icon: "postman" },
+    { name: "Figma", icon: "figma" },
+    { name: "Git", icon: "git" },
   ],
 };
 
