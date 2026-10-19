@@ -1,7 +1,6 @@
 const VARIANTS = {
   primary: "btn-primary",
   secondary: "btn-secondary",
-  ghost: "btn-ghost",
 };
 
 const SIZES = {
