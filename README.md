@@ -1,6 +1,7 @@
 # Hi, I'm Htet Nandar Winn 👋
 
-🎓Full Stack Developer Web Developer
+🎓Full Stack Developer, Web Developer
+
 📍 Yangon, Myanmar
 
 I'm learning web development and building projects using React, PHP, Laravel, and MySQL.
