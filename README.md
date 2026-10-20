@@ -1,6 +1,6 @@
 # Hi, I'm Htet Nandar Winn 👋
 
-🎓 IT Student | Aspiring Web Developer  
+🎓Full Stack Developer Web Developer
 📍 Yangon, Myanmar
 
 I'm learning web development and building projects using React, PHP, Laravel, and MySQL.
@@ -12,7 +12,7 @@ I'm learning web development and building projects using React, PHP, Laravel, an
 ## 🛠️ Technologies I'm Learning
 
 - HTML, CSS, JavaScript
-- React.js and Tailwind CSS
+- React.js Next.js and Tailwind CSS
 - PHP and Laravel
 - MySQL
 - Git and GitHub
