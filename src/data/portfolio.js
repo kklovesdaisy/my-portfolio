@@ -20,7 +20,7 @@
  *  ----------------
  *  profile     name, title, short intro, location, photo, CV, email + links
  *  navItems    the links in the top navigation bar
- *  hero        the greeting and headline at the top of the page
+ *  hero        the greeting, name and role lines at the top of the page
  *  about       the "About Me" text, quick facts and info cards
  *  skills      the "Skills & Abilities" grid
  *  education   the "Education" timeline entries
@@ -56,12 +56,6 @@ export const profile = {
   /** Logo mark, max 2–3 characters. Derived from your name automatically —
       replace with your own string (e.g. "HW") to override. */
   initials: deriveInitials(fullName),
-
-  /** Professional title. Shown in the hero badge and the contact area. */
-  title: "IT Student | Aspiring Web Developer",
-
-  /** A short version of your title, shown under your name in the navbar. */
-  shortTitle: "IT Student",
 
   /** Short introduction — the paragraph next to the headline in the hero.
       Keep it to 1–3 friendly sentences. */
@@ -102,89 +96,72 @@ export const profile = {
 /* ============================================================================
    NAVIGATION  —  the top navigation links
    `href` must match the `id` of a section (home, about, skills, education,
-   projects, learning, contact). Reorder or remove items freely.
-   The "Learning Journey" section sits between Projects and Contact but is
-   intentionally kept out of the top navigation, so the menu stays to the six
-   main links.
+   experience, projects, contact). Reorder or remove items freely.
    ============================================================================ */
 export const navItems = [
   { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
   { label: "Skills", href: "#skills" },
   { label: "Education", href: "#education" },
+  { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
   { label: "Contact", href: "#contact" },
 ];
 
 /* ============================================================================
    HERO  —  the top of the page
+   The hero leads with three lines:
+     1. greeting   fades in
+     2. name       fades in and drifts up
+     3. role       typed out letter by letter, then loops through `typed`
+   Each static line also takes an optional `delay`, in seconds.
    ============================================================================ */
 export const hero = {
-  /** Small line shown above the headline, e.g. "Hi, I'm <Your Name>". */
-  greeting: "Hi, I'm",
+  /** Line 1 — small greeting above your name. */
+  greeting: "Hi There,",
 
-  /** The big headline. */
-  heading: "Building Digital Experiences Through Code",
+  /** Line 2 — your name. Set `nameHighlight` to the part to paint with the
+      gradient, or "" for a solid colour. */
+  name: fullName,
+  nameHighlight: fullName,
 
-  /** Words inside `heading` to paint with the gradient. Must match `heading`
-      exactly. Set to "" for no gradient. */
-  headingHighlight: "Digital Experiences",
+  /** Line 3 — your main role. This is the line that types itself out; it is
+      also the stable name announced by screen readers, and the loop always
+      begins with `typed[0]`, which should match this value. */
+  role: "Full Stack Developer",
+
+  /** The typing loop: each phrase is typed letter by letter, held, deleted,
+      then the next one starts — forever. Add or remove at will; the first
+      entry should stay equal to `role`, since it is where the loop begins. */
+  typed: ["Full Stack Developer", "Web Developer"],
 };
 
 /* ============================================================================
    ABOUT  —  the "About Me" section
    ============================================================================ */
 export const about = {
-  /** Lead sentence — the largest paragraph. */
-  lead: "I'm an IT student learning web development and software engineering. I enjoy building useful, responsive, and user-friendly applications, and I'm developing my skills in both frontend and backend technologies. I'm looking for an internship or junior developer opportunity to gain practical experience, and I'm working toward becoming a full-stack developer.",
+  /** Lead line — the largest text. Rendered with `**bold**` support. */
+  lead: "I'm **Htet Nandar Winn**",
 
-  /** Supporting paragraphs. Add or remove entries freely. */
+  /** Your professional title, shown just under the lead line. */
+  role: "Full Stack Developer",
+
+  /** Supporting paragraphs. Add or remove entries freely.
+      Wrap any phrase in **double asterisks** to render it bold. */
   paragraphs: [
-    "My main focus is front-end web development with HTML, CSS, JavaScript, React.js, and Tailwind CSS. I enjoy building interfaces and understanding how the different parts of a web application fit together.",
-    "Alongside the front end, I'm learning backend development with PHP and Laravel and working with databases using MySQL, and I'm exploring Node.js, React Native, and C#. I'm also improving my programming, problem-solving, and software design skills, and I use Git and GitHub to manage my code.",
+    "I'm a **Full Stack Developer** with approximately **1 year of experience** in web development. I enjoy building **responsive web applications** and writing **clean, maintainable code**.",
+    "My technical skills include **PHP**, **Laravel**, **React**, **JavaScript**, **HTML5**, **CSS3**, **Tailwind CSS**, and **MySQL**. I also use **Git**, **GitHub**, **Vite**, **Postman**, and **Figma** in my development workflow.",
+    "Currently, I work at **ITVisionHub Co., Ltd.** in **Yangon, Myanmar**, where I continue developing my technical skills and gaining practical experience in software development.",
   ],
-
-  /** Your goal — shown in a highlighted callout with a "Let's talk" button. */
-  goal: "My goal is to begin my career as a Junior Web Developer and keep growing toward becoming a Full-Stack Developer.",
 
   /** Quick facts. `icon` is one of: "pin", "code", "book", "spark".
       Add or remove rows freely. */
   facts: [
     { icon: "pin", label: "Location", value: profile.location },
-    { icon: "code", label: "Focus", value: "Web Development" },
-    { icon: "book", label: "Currently", value: profile.shortTitle },
-    { icon: "spark", label: "Availability", value: "Open to junior roles" },
+    { icon: "code", label: "Focus", value: "Full Stack Development" },
+    { icon: "book", label: "Currently", value: "ITVisionHub Co., Ltd." },
+    { icon: "spark", label: "Experience", value: "Approximately 1 year" },
   ],
-
-  cards: {
-    /* The Education card pulls its values straight from the first entry in
-       `education.entries` below — edit your education in one place. */
-    education: {
-      title: "Education",
-      subtitle: "My academic background.",
-    },
-    interests: {
-      title: "Interests",
-      subtitle: "What I enjoy exploring and building.",
-      tags: [
-        "Web Development",
-        "React.js",
-        "Tailwind CSS",
-        "PHP & Laravel",
-        "MySQL",
-      ],
-    },
-    goals: {
-      title: "Career Goals",
-      subtitle: "Where I'm heading next.",
-      points: [
-        "Gain practical experience through an internship or junior developer role",
-        "Grow into a Full-Stack Developer",
-        "Keep learning modern web technologies",
-      ],
-      tags: ["Junior Web Developer", "Full-Stack Developer"],
-    },
-  },
 };
 
 /* ============================================================================
@@ -229,47 +206,6 @@ export const skills = {
 };
 
 /* ============================================================================
-   LEARNING JOURNEY  —  the "Learning Journey" section
-   Technologies and software-development concepts you are currently learning.
-   Each group has: key, icon ("spark" | "compass" | "code" | "book" | "target"),
-   tone ("purple" accent | "blue"), title, note, and items.
-   An item is `{ name, color }` (coloured chip) or `{ name }` (accent badge).
-   ============================================================================ */
-export const learning = {
-  intro:
-    "I'm continuously learning web development and software engineering, and I enjoy improving my programming, problem-solving, and software-design skills. Here is what I'm exploring right now.",
-
-  groups: [
-    {
-      key: "technologies",
-      icon: "spark",
-      tone: "purple",
-      title: "Technologies I'm exploring",
-      note: "Languages and tools I'm learning outside my current coursework.",
-      items: [
-        { name: "Node.js", color: "#3c873a" },
-        { name: "React Native", color: "#61dafb" },
-        { name: "C#", color: "#239120" },
-      ],
-    },
-    {
-      key: "concepts",
-      icon: "compass",
-      tone: "blue",
-      title: "Concepts I'm building",
-      note: "Software-development ideas I'm practising as I learn.",
-      items: [
-        { name: "Domain-Driven Design (DDD)" },
-        { name: "Software design" },
-        { name: "Problem solving" },
-      ],
-    },
-  ],
-
-  footnote: "Learning step by step — no expert claims, just steady progress.",
-};
-
-/* ============================================================================
    EDUCATION  —  the "Education" timeline
    Replace or add entries as your studies progress.
    `coursework` and `certifications` only render when the arrays contain items,
@@ -302,15 +238,66 @@ export const education = {
 };
 
 /* ============================================================================
+   EXPERIENCE  —  the "My Experience" section
+   One card per role. The first entry is marked `current: true` and gets the
+   "Current Role" badge.
+   ----------------------------------------------------------------------------
+   Fields
+     company     (string)  Employer name.
+     role        (string)  Your job title.
+     period      (string)  Date range exactly as you want it shown.
+     datetime    (string)  Machine-readable start date for the <time> element,
+                           e.g. "2025-01".
+     summary     (string)  One or two sentences describing the role.
+     tech        (array)   Technologies used, shown as chips ([] = none).
+     current     (bool)    true  -> shows the "Current Role" badge.
+   `highlights` (array) is rendered as a bullet list; leave it empty ([]) to
+   omit the list entirely.
+   ============================================================================ */
+export const experience = {
+  eyebrow: "04 — Experience",
+
+  heading: "My Experience",
+
+  intro: "Where I am putting my skills to work.",
+
+  entries: [
+    {
+      company: "ITVisionHub Co., Ltd.",
+      role: "Full Stack Developer",
+      period: "2025 – Present",
+      datetime: "2025-01",
+      summary:
+        "Working as a Full Stack Developer, building and maintaining web applications across both frontend and backend.",
+      tech: [
+        "PHP",
+        "Laravel",
+        "React.js",
+        "JavaScript",
+        "HTML5",
+        "CSS3",
+        "Tailwind CSS",
+        "MySQL",
+        "Git",
+        "GitHub",
+        "Vite",
+        "Postman",
+        "Figma",
+      ],
+      highlights: [],
+      current: true,
+    },
+    // Add more roles like the one above — newest first.
+  ],
+};
+
+/* ============================================================================
    CONTACT  —  the "Contact" section
    The email / GitHub / LinkedIn links come from `profile` above. LinkedIn is
    hidden automatically while `profile.linkedin` is empty.
    There is no contact form and no backend on this site.
    ============================================================================ */
 export const contact = {
-  intro:
-    "I am currently looking for a Junior Web Developer role. If you have an opportunity, a question, or just want to say hello, I would be glad to hear from you.",
-
   availability: "Open to Junior Web Developer roles",
 };
 

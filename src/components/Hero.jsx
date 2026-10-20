@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { hero, profile } from "../data/portfolio";
-import Badge from "./Badge";
 import Button from "./Button";
 import Container from "./Container";
 import Reveal from "./Reveal";
@@ -21,13 +20,129 @@ const TECH_CHIPS = [
   { label: "Tailwind", dot: "bg-blue-light", position: "left-[-1.4rem] bottom-28", delay: "2.1s" },
 ];
 
-/* Split the headline so the highlighted words get the gradient. */
-const HAS_HIGHLIGHT =
-  Boolean(hero.headingHighlight) && hero.heading.includes(hero.headingHighlight);
-const HEADING_HIGHLIGHT = HAS_HIGHLIGHT ? hero.headingHighlight : "";
-const [HEADING_BEFORE, HEADING_AFTER] = HAS_HIGHLIGHT
-  ? hero.heading.split(HEADING_HIGHLIGHT)
-  : [hero.heading, ""];
+/* The animated introduction, in order. Each entry carries its own stagger.
+   The last entry is static text that fades in; the typed, looping role line
+   is rendered after it by `TypedLine`, using the same `role` tone. */
+const INTRO_LINES = [
+  { id: "greeting", text: hero.greeting, kind: "eyebrow", animation: "animate-hero-blur", delay: 0.1 },
+  { id: "name", text: hero.name, kind: "name", animation: "animate-hero-in", delay: 0.5 },
+].filter((line) => Boolean(line.text));
+
+const TONE = {
+  eyebrow: "text-2xl font-semibold tracking-tight text-foreground sm:text-[1.75rem]",
+  name: "mt-3 text-5xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl xl:text-[4.75rem]",
+  role: "relative text-[1.625rem] font-bold tracking-tight text-muted sm:text-4xl lg:text-[2.75rem] xl:text-[2.875rem]",
+};
+
+/* Split a line so `highlight` gets the gradient while the rest stays solid. */
+function splitHighlight(text, highlight) {
+  if (!highlight || !text.includes(highlight)) return [text, ""];
+  return text.split(highlight);
+}
+
+/* ============================================================================
+   INTRO LINE
+   One animated intro line. The moving parts sit on inner elements so a line
+   can never overlap the next one while it drifts up.
+   ============================================================================ */
+function IntroLine({ line }) {
+  const [before, after] = splitHighlight(line.text, hero.nameHighlight);
+  const highlight =
+    line.kind === "name" && before !== line.text ? hero.nameHighlight : "";
+
+  return (
+    <p
+      className={`hero-line ${line.animation} ${TONE[line.kind]}`}
+      style={{ "--hero-delay": `${line.delay}s` }}
+    >
+      <span className="inline-block">
+        {before}
+        {highlight ? <span className="text-gradient">{highlight}</span> : null}
+        {after}
+      </span>
+    </p>
+  );
+}
+
+/* Types the role phrases out one letter at a time, holds, deletes and moves
+   on — the loop the reference site uses for its hero.
+
+   Details that keep it usable rather than annoying:
+   - the caret is a plain CSS blink, nothing per-frame in JS;
+   - every duration is a single timer that is cleared on unmount, so there is
+     no leaked interval and no state update after the component goes away;
+   - with `prefers-reduced-motion` the loop never starts: the first phrase is
+     simply shown, static;
+   - the caret is `aria-hidden` and the changing text is hidden from the
+     accessibility tree, so the heading's `aria-label` (set in Hero) is what
+     screen readers announce — a stable name, not a half-typed word. */
+function TypedLine({ phrases, delay, label }) {
+  const [index, setIndex] = useState(0);
+  const [shown, setShown] = useState("");
+  const [deleting, setDeleting] = useState(false);
+  const [started, setStarted] = useState(false);
+
+  const reduced =
+    typeof window !== "undefined" &&
+    window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+
+  /* Wait for the other hero lines to finish before typing begins. */
+  useEffect(() => {
+    if (reduced) return;
+    const id = window.setTimeout(() => setStarted(true), delay * 1000);
+    return () => window.clearTimeout(id);
+  }, [delay, reduced]);
+
+  useEffect(() => {
+    if (reduced || !started) return;
+
+    const phrase = phrases[index % phrases.length];
+    let wait;
+
+    if (!deleting && shown === phrase) {
+      wait = 1400; // hold the finished word
+    } else if (deleting && shown === "") {
+      wait = 260; // pause on empty, then type the next one
+    } else {
+      wait = deleting ? 45 : 85;
+    }
+
+    const id = window.setTimeout(() => {
+      if (!deleting && shown === phrase) {
+        setDeleting(true);
+      } else if (deleting && shown === "") {
+        setDeleting(false);
+        setIndex((i) => (i + 1) % phrases.length);
+      } else {
+        setShown(phrase.slice(0, shown.length + (deleting ? -1 : 1)));
+      }
+    }, wait);
+
+    return () => window.clearTimeout(id);
+  }, [phrases, index, shown, deleting, started, reduced]);
+
+  const text = reduced ? phrases[0] : shown;
+
+  return (
+    <p
+      className={`hero-line ${TONE.role}`}
+      style={{ "--hero-delay": `${delay}s` }}
+    >
+      {/* The visible copy is decorative; `label` carries the stable name. */}
+      <span aria-hidden="true" className="relative inline-block">
+        <span className="text-gradient">{text}</span>
+        {reduced ? null : (
+          <span
+            aria-hidden="true"
+            className="typed-caret typed-caret-blink ml-0.5 inline-block w-[0.08em] bg-blue align-baseline"
+          />
+        )}
+      </span>
+      {/* Keeps the line's real, unchanging text in the DOM for screen readers. */}
+      <span className="sr-only">{label}</span>
+    </p>
+  );
+}
 
 function FloatingChip({ label, dot, position, delay }) {
   return (
@@ -66,10 +181,13 @@ export default function Hero() {
       id="home"
       className="relative overflow-hidden lg:flex lg:min-h-[calc(100svh-4.5rem)] lg:items-center"
     >
-      {/* Ambient background */}
+      {/* Ambient background — the shade stays visible at every scroll
+          position; the grid sits on top of it and only softens at the very
+          edges, so the hero never goes flat. */}
+      <div aria-hidden="true" className="hero-shade absolute inset-0" />
       <div
         aria-hidden="true"
-        className="absolute inset-0 bg-grid opacity-[0.35] [mask-image:radial-gradient(75%_65%_at_50%_0%,#000_35%,transparent_100%)]"
+        className="bg-grid absolute inset-0 opacity-[0.4] [mask-image:linear-gradient(to_bottom,#000_0%,#000_62%,transparent_100%)]"
       />
       <div
         aria-hidden="true"
@@ -81,41 +199,21 @@ export default function Hero() {
       />
 
       <Container className="relative py-20 sm:py-24 lg:py-24">
-        <div className="grid items-center gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
+        <div className="grid items-center gap-14 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14 xl:gap-20">
           {/* ---------------- Left: copy ---------------- */}
-          <div>
-            <Reveal>
-              <Badge
-                tone="accent"
-                className="gap-2 py-1.5 pl-2.5 pr-3.5 text-[13px]"
-              >
-                <span className="relative flex size-2">
-                  <span className="absolute inline-flex size-full animate-ping rounded-full bg-purple opacity-75" />
-                  <span className="relative inline-flex size-2 rounded-full bg-purple" />
-                </span>
-                {profile.title}
-              </Badge>
-            </Reveal>
-
-            <Reveal delay={80}>
-              <p className="mt-6 text-xl font-semibold tracking-tight sm:text-2xl">
-                {hero.greeting ? `${hero.greeting} ` : ""}
-                <span className="text-gradient">{profile.name}</span>
-              </p>
-              <h1 className="mt-3 text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl xl:text-[4.25rem]">
-                {HEADING_BEFORE}
-                {HEADING_HIGHLIGHT ? (
-                  <span className="text-gradient">{HEADING_HIGHLIGHT}</span>
-                ) : null}
-                {HEADING_AFTER}
-              </h1>
-            </Reveal>
-
-            <Reveal delay={140}>
-              <p className="mt-6 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
-                {profile.intro}
-              </p>
-            </Reveal>
+          <div className="min-w-0 max-w-3xl">
+            <h1
+              aria-label={[...INTRO_LINES.map((line) => line.text), hero.role]
+                .filter(Boolean)
+                .join(" ")}
+            >
+              {INTRO_LINES.map((line) => (
+                <IntroLine key={line.id} line={line} />
+              ))}
+              {hero.typed?.length ? (
+                <TypedLine phrases={hero.typed} delay={1.25} label={hero.role} />
+              ) : null}
+            </h1>
 
             <Reveal delay={200}>
               <div className="mt-9 flex flex-wrap items-center gap-3">
@@ -170,7 +268,7 @@ export default function Hero() {
 
                 <a
                   href={`mailto:${profile.email}`}
-                  className="group inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-foreground"
+                  className="group inline-flex items-center gap-2 text-[1rem] text-muted transition-colors hover:text-foreground"
                 >
                   <MailIcon className="size-4 text-purple-light" />
                   {profile.email}
@@ -178,7 +276,7 @@ export default function Hero() {
 
                 <a
                   href="#contact"
-                  className="inline-flex items-center gap-2 text-sm text-muted transition-colors hover:text-foreground"
+                  className="inline-flex items-center gap-2 text-[1rem] text-muted transition-colors hover:text-foreground"
                 >
                   <MapPinIcon className="size-4 text-blue" />
                   {profile.location}
@@ -190,7 +288,7 @@ export default function Hero() {
           {/* ---------------- Right: profile ---------------- */}
           <Reveal
             delay={180}
-            className="relative mx-auto w-full max-w-[22rem] sm:max-w-sm lg:justify-self-end"
+            className="relative mx-auto w-full max-w-[22rem] sm:max-w-sm lg:max-w-[24rem] lg:justify-self-end"
           >
             <div className="relative">
               <div
@@ -218,11 +316,8 @@ export default function Hero() {
 
                   <div className="absolute inset-x-3 bottom-3 flex items-center justify-between gap-3 rounded-2xl border border-border bg-background/70 px-4 py-3 backdrop-blur">
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold">
+                      <p className="truncate text-[1rem] font-semibold">
                         {profile.name}
-                      </p>
-                      <p className="font-mono text-[11px] text-subtle">
-                        {profile.shortTitle}
                       </p>
                     </div>
                     <span className="badge badge-blue shrink-0">

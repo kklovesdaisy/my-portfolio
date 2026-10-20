@@ -77,8 +77,8 @@ function ProjectCard({ project, index }) {
       {/* Details */}
       <div className="flex flex-1 flex-col p-6 pt-3">
         <div className="flex items-start justify-between gap-3">
-          <h3 className="text-lg font-semibold">{project.title}</h3>
-          <span className="mt-0.5 font-mono text-xs text-subtle">
+          <h3 className="text-[1.375rem] font-semibold">{project.title}</h3>
+          <span className="mt-0.5 font-mono text-[0.8125rem] text-subtle">
             {String(index + 1).padStart(2, "0")}
           </span>
         </div>
@@ -89,7 +89,7 @@ function ProjectCard({ project, index }) {
           </p>
         ) : null}
 
-        <p className="mt-3 text-sm leading-relaxed text-muted">
+        <p className="mt-3 text-[1rem] leading-relaxed text-muted">
           {project.description}
         </p>
 
@@ -125,7 +125,7 @@ function ProjectCard({ project, index }) {
               <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-subtle">
                 Architecture
               </span>
-              <span className="text-sm font-medium text-foreground">
+              <span className="text-[1rem] font-medium text-foreground">
                 {project.architecture}
               </span>
             </div>
@@ -179,14 +179,14 @@ export default function Projects() {
 
       <Container className="relative">
         <Reveal className="max-w-2xl">
-          <p className="eyebrow">04 — Projects</p>
+          <p className="eyebrow">05 — Projects</p>
           <h2
             id="projects-heading"
-            className="mt-6 text-3xl font-bold tracking-tight sm:text-4xl"
+            className="section-heading mt-6"
           >
             Featured Projects
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-muted">
+          <p className="mt-4 text-[1.0625rem] leading-relaxed text-muted lg:text-[1.125rem]">
             Projects I&apos;m building while learning. Both are web
             applications built with PHP and Laravel and organised using
             Domain-Driven Design (DDD) — a way of structuring the code around

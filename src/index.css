@@ -55,11 +55,20 @@
     0 24px 48px -30px rgb(0 0 0 / 0.9);
   --shadow-glow-purple: 0 18px 44px -16px rgb(59 130 246 / 0.7);
 
+  /* -- Layout ---------------------------------------------- */
+  /* One shared page width for the header, every section and the footer.
+     Large desktop caps out at 85rem (1360px); below that it stays fluid. */
+  --container-page: 85rem;
+
   /* -- Motion ---------------------------------------------- */
   --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
 
   --animate-float: float 7s ease-in-out infinite;
   --animate-pulse-glow: pulse-glow 4s ease-in-out infinite;
+
+  /* Hero intro — each line plays once, in sequence (see .hero-line delays). */
+  --animate-hero-blur: hero-blur 0.9s var(--ease-out-expo) both;
+  --animate-hero-in: hero-in 0.95s var(--ease-out-expo) both;
 
   @keyframes float {
     0%,
@@ -77,6 +86,38 @@
     }
     50% {
       opacity: 0.9;
+    }
+  }
+  /* "Hi There," — fades in while sharpening out of a blur. */
+  @keyframes hero-blur {
+    from {
+      opacity: 0;
+      filter: blur(0.5em);
+    }
+    to {
+      opacity: 1;
+      filter: blur(0);
+    }
+  }
+  /* Name and role lines — lift in, sharpen, and settle with a whisper of
+     overshoot. Transform and opacity run on the compositor. */
+  @keyframes hero-in {
+    0% {
+      opacity: 0;
+      transform: translate3d(0, 1.75rem, 0);
+      filter: blur(0.35em);
+    }
+    60% {
+      opacity: 1;
+      filter: blur(0);
+    }
+    75% {
+      transform: translate3d(0, -0.25rem, 0);
+    }
+    100% {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+      filter: blur(0);
     }
   }
 }
@@ -97,6 +138,9 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    /* Comfortable base copy that suits the wider canvas (~17px). */
+    font-size: 1.0625rem;
+    line-height: 1.65;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -176,18 +220,31 @@
   /* -- Layout ---------------------------------------------- */
   .container-page {
     width: 100%;
-    max-width: 76rem;
+    max-width: var(--container-page);
     margin-inline: auto;
-    padding-inline: 1.25rem;
+    /* Mobile: ~16px of breathing room on each side. */
+    padding-inline: 1rem;
+  }
+  @media (min-width: 480px) {
+    .container-page {
+      padding-inline: 1.25rem;
+    }
   }
   @media (min-width: 640px) {
     .container-page {
       padding-inline: 1.75rem;
     }
   }
+  /* Tablet: trim the gutter a little as the columns have room to spare. */
+  @media (min-width: 768px) {
+    .container-page {
+      padding-inline: 2rem;
+    }
+  }
+  /* Laptop and up: balanced margins, then the width simply caps out. */
   @media (min-width: 1024px) {
     .container-page {
-      padding-inline: 2.5rem;
+      padding-inline: clamp(2rem, 3vw, 3.5rem);
     }
   }
 
@@ -217,11 +274,17 @@
     align-items: center;
     gap: 0.7rem;
     font-family: var(--font-mono);
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     font-weight: 500;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--color-purple-light);
+  }
+  @media (min-width: 1024px) {
+    /* Section labels sit at ~14px on large screens. */
+    .eyebrow {
+      font-size: 0.875rem;
+    }
   }
   .eyebrow::before {
     content: "";
@@ -234,6 +297,17 @@
     );
   }
 
+  /* -- Section heading ------------------------------------- */
+  /* One clamp drives every main section title, so they stay in step:
+     ~30px on small phones, ~36px on tablets, ~42-44px on desktop. */
+  .section-heading {
+    font-size: clamp(1.875rem, 1.35rem + 2.1vw, 2.75rem);
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
   /* -- Buttons --------------------------------------------- */
   .btn {
     display: inline-flex;
@@ -244,7 +318,7 @@
     border: 1px solid transparent;
     border-radius: 0.85rem;
     font-family: var(--font-sans);
-    font-size: 0.9375rem;
+    font-size: 1.0625rem;
     font-weight: 600;
     line-height: 1;
     letter-spacing: -0.01em;
@@ -306,13 +380,13 @@
   }
 
   .btn-sm {
-    padding: 0.55rem 1rem;
-    font-size: 0.85rem;
+    padding: 0.6rem 1.1rem;
+    font-size: 0.9375rem;
     border-radius: 0.7rem;
   }
   .btn-lg {
     padding: 1rem 1.75rem;
-    font-size: 1rem;
+    font-size: 1.0625rem;
     border-radius: 1rem;
   }
 
@@ -370,10 +444,10 @@
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    padding: 0.32rem 0.7rem;
+    padding: 0.34rem 0.72rem;
     border: 1px solid var(--color-border);
     border-radius: 9999px;
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     font-weight: 600;
     letter-spacing: 0.01em;
     color: var(--color-muted);
@@ -456,6 +530,134 @@
 }
 
 /* ============================================================
+   HERO SHADE
+   A permanent, always-on dark shade behind the hero: a deep base
+   wash plus coloured radial pools in the brand blue/violet. It
+   never masks out to transparent, so the hero keeps its depth at
+   every scroll position and viewport size.
+   ============================================================ */
+@utility hero-shade {
+  background-image:
+    /* brand pools, strongest at the top corners */
+    radial-gradient(
+      58% 52% at 12% 4%,
+      color-mix(in oklab, var(--color-purple) 26%, transparent) 0%,
+      transparent 68%
+    ),
+    radial-gradient(
+      62% 56% at 92% 10%,
+      color-mix(in oklab, var(--color-blue) 22%, transparent) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      70% 60% at 50% 108%,
+      color-mix(in oklab, var(--color-blue-deep) 18%, transparent) 0%,
+      transparent 72%
+    ),
+    /* dark base wash that keeps text contrast even without the pools */
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--color-background) 72%, transparent) 0%,
+      color-mix(in oklab, var(--color-background) 42%, transparent) 45%,
+      color-mix(in oklab, var(--color-background) 70%, transparent) 100%
+    );
+}
+
+/* ============================================================
+   HERO INTRO
+   One line of the animated introduction. `--hero-delay` staggers
+   the sequence; the animation itself comes from a utility class
+   (animate-hero-blur, animate-hero-in).
+   ============================================================ */
+@utility hero-line {
+  animation-delay: var(--hero-delay, 0ms);
+}
+
+@keyframes fact-in {
+  from {
+    opacity: 0;
+    transform: translate3d(-0.75rem, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* ============================================================
+   QUICK FACTS ROWS
+   Each row of the About "Quick facts" card slides in from the left, one
+   after another. The animation is self-contained: it starts as soon as
+   the card paints and does NOT depend on IntersectionObserver, so the
+   rows can never be left stranded invisible. `--fact-delay` staggers
+   them, and `both` fill keeps the start state held until each turn.
+   ============================================================ */
+@utility fact-row {
+  animation: fact-in 0.55s var(--ease-out-expo) both;
+  animation-delay: var(--fact-delay, 0ms);
+}
+
+/* ============================================================
+   CARD SHADE
+   The same always-on dark shade idea as the hero, scaled down onto
+   a Card: coloured pools in the brand blue/violet over a deeper base
+   wash. It sits above the card's own gradient but below its content.
+   Opt in with <Card shade>.
+   ============================================================ */
+@utility card-shade {
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.card-shade::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image:
+    radial-gradient(
+      70% 60% at 8% 0%,
+      color-mix(in oklab, var(--color-purple) 22%, transparent) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      80% 70% at 100% 8%,
+      color-mix(in oklab, var(--color-blue) 18%, transparent) 0%,
+      transparent 72%
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklab, var(--color-background) 55%, transparent) 0%,
+      color-mix(in oklab, var(--color-background) 30%, transparent) 100%
+    );
+}
+
+/* ============================================================
+   HERO TYPING CARET
+   The little bar that sits after the typed words. It is a plain
+   blink, so nothing ticks in JS while the text is being typed.
+   ============================================================ */
+@utility typed-caret {
+  height: 1em;
+}
+
+@utility typed-caret-blink {
+  animation: typed-caret-blink 1s step-end infinite;
+}
+
+@keyframes typed-caret-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ============================================================
    ACCESSIBILITY
    ============================================================ */
 @media (prefers-reduced-motion: reduce) {
@@ -468,5 +670,19 @@
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+  }
+  /* The hero intro collapses its own delay too, so the text is simply
+     there — visible and complete — with no waiting or movement. */
+  .hero-line {
+    animation-delay: 0ms !important;
+  }
+  /* Quick-facts rows: no stagger and no hidden state — show them plainly. */
+  .fact-row {
+    animation-delay: 0ms !important;
+    opacity: 1 !important;
+  }
+  /* No blinking caret either — the typed line just shows its first phrase. */
+  .typed-caret {
+    display: none !important;
   }
 }

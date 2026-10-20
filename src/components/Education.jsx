@@ -78,13 +78,13 @@ function EducationEntry({ entry, isLast, delay }) {
         <Card hover className="overflow-hidden p-0">
           <CampusBanner entry={entry} />
 
-          <div className="p-7">
+          <div className="p-7 lg:p-8">
             <div className="flex flex-wrap items-start justify-between gap-3">
-              <h3 className="text-lg font-semibold">{entry.degree}</h3>
+              <h3 className="text-[1.375rem] font-semibold">{entry.degree}</h3>
               {entry.period ? <Badge tone="blue">{entry.period}</Badge> : null}
             </div>
 
-            <ul className="mt-4 space-y-2.5 text-sm text-muted">
+            <ul className="mt-4 space-y-2.5 text-[1rem] text-muted">
               <li className="flex items-center gap-2.5">
                 <BookOpenIcon
                   className="size-4 shrink-0 text-purple-light"
@@ -120,7 +120,7 @@ function EducationEntry({ entry, isLast, delay }) {
             </ul>
 
             {entry.description ? (
-              <p className="mt-4 text-sm leading-relaxed text-muted">
+              <p className="mt-4 text-[1rem] leading-relaxed text-muted">
                 {entry.description}
               </p>
             ) : null}
@@ -149,7 +149,7 @@ function EducationEntry({ entry, isLast, delay }) {
                   {entry.certifications.map((certification) => (
                     <li
                       key={certification}
-                      className="flex items-start gap-2.5 text-sm text-muted"
+                      className="flex items-start gap-2.5 text-[1rem] text-muted"
                     >
                       <SparklesIcon
                         className="mt-0.5 size-4 shrink-0 text-blue"
@@ -185,11 +185,11 @@ export default function Education() {
           <p className="eyebrow">03 — Education</p>
           <h2
             id="education-heading"
-            className="mt-6 text-3xl font-bold tracking-tight sm:text-4xl"
+            className="section-heading mt-6"
           >
             Education
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-muted">
+          <p className="mt-4 text-[1.0625rem] leading-relaxed text-muted lg:text-[1.125rem]">
             {education.intro}
           </p>
         </Reveal>

@@ -86,19 +86,16 @@ export default function Contact() {
           {/* ---------------- Invitation ---------------- */}
           <div className="min-w-0">
             <Reveal>
-              <p className="eyebrow">06 — Contact</p>
+              <p className="eyebrow">07 — Contact</p>
               <h2
                 id="contact-heading"
-                className="mt-6 text-3xl font-bold tracking-tight sm:text-4xl"
+                className="section-heading mt-6"
               >
                 Let&apos;s Work Together
               </h2>
               <div className="mt-5">
                 <Badge tone="blue">{contact.availability}</Badge>
               </div>
-              <p className="mt-5 text-base leading-relaxed text-muted">
-                {contact.intro}
-              </p>
             </Reveal>
 
             <Reveal delay={100}>
@@ -144,10 +141,10 @@ export default function Contact() {
                         <Icon className="size-5" />
                       </IconTile>
                       <span className="min-w-0">
-                        <span className="block text-xs uppercase tracking-wide text-muted">
+                        <span className="block text-[0.875rem] uppercase tracking-wide text-muted">
                           {label}
                         </span>
-                        <span className="block truncate text-sm font-medium text-foreground">
+                        <span className="block truncate text-[1rem] font-medium text-foreground">
                           {value}
                         </span>
                       </span>
@@ -158,7 +155,7 @@ export default function Contact() {
               )}
             </ul>
 
-            <p className="mt-4 flex items-start gap-2 rounded-lg border border-dashed border-border-strong bg-surface/50 p-3.5 text-xs leading-relaxed text-subtle">
+            <p className="mt-4 flex items-start gap-2 rounded-lg border border-dashed border-border-strong bg-surface/50 p-3.5 text-[0.875rem] leading-relaxed text-subtle">
               <InfoIcon className="mt-0.5 size-4 shrink-0 text-blue" />
               This site has no contact form or backend — the email link above is
               the best way to reach me.

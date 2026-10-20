@@ -56,7 +56,7 @@ export default function Navbar() {
           : "border-transparent bg-transparent",
       ].join(" ")}
     >
-      <Container className="flex h-16 items-center justify-between gap-4 lg:h-[4.5rem]">
+      <Container className="flex h-16 items-center justify-between gap-4 lg:h-[4.75rem]">
         {/* Logo / name */}
         <a
           href="#home"
@@ -65,21 +65,18 @@ export default function Navbar() {
         >
           <span
             aria-hidden="true"
-            className="grid size-9 place-items-center rounded-xl bg-gradient-to-br from-purple to-blue-deep text-sm font-bold text-white shadow-glow-purple transition-transform duration-300 group-hover:scale-105"
+            className="grid size-10 place-items-center rounded-xl bg-gradient-to-br from-purple to-blue-deep text-sm font-bold text-white shadow-glow-purple transition-transform duration-300 group-hover:scale-105"
           >
             {profile.initials}
           </span>
           <span className="flex flex-col leading-tight">
-            <span className="text-sm font-semibold">{profile.name}</span>
-            <span className="font-mono text-[11px] text-subtle">
-              {profile.shortTitle}
-            </span>
+            <span className="text-[1.0625rem] font-semibold">{profile.name}</span>
           </span>
           <span className="sr-only">— back to top</span>
         </a>
 
         {/* Desktop navigation */}
-        <nav className="hidden items-center gap-0.5 lg:flex">
+        <nav className="hidden items-center gap-1 lg:flex">
           {navItems.map((item) => {
             const id = item.href.replace("#", "");
             const isActive = active === id;
@@ -89,7 +86,7 @@ export default function Navbar() {
                 href={item.href}
                 aria-current={isActive ? "location" : undefined}
                 className={[
-                  "relative rounded-lg px-3.5 py-2 text-sm font-medium transition-colors duration-200",
+                  "relative rounded-lg px-4 py-2 text-[1rem] font-medium transition-colors duration-200",
                   isActive
                     ? "text-foreground"
                     : "text-muted hover:text-foreground",
@@ -99,7 +96,7 @@ export default function Navbar() {
                 <span
                   aria-hidden="true"
                   className={[
-                    "absolute inset-x-3 -bottom-px h-px bg-gradient-to-r from-purple to-blue transition-opacity duration-300",
+                    "absolute inset-x-4 -bottom-px h-px bg-gradient-to-r from-purple to-blue transition-opacity duration-300",
                     isActive ? "opacity-100" : "opacity-0",
                   ].join(" ")}
                 />
@@ -174,7 +171,7 @@ export default function Navbar() {
                 onClick={closeMenu}
                 aria-current={isActive ? "location" : undefined}
                 className={[
-                  "flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-colors duration-200",
+                  "flex items-center justify-between rounded-xl px-4 py-3 text-[1.0625rem] font-medium transition-colors duration-200",
                   isActive
                     ? "bg-surface-2 text-foreground"
                     : "text-muted hover:bg-surface-2/70 hover:text-foreground",

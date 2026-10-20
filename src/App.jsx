@@ -2,11 +2,12 @@ import About from "./components/About";
 import BackToTop from "./components/BackToTop";
 import Contact from "./components/Contact";
 import Education from "./components/Education";
+import Experience from "./components/Experience";
 import Footer from "./components/Footer";
 import Hero from "./components/Hero";
-import Learning from "./components/Learning";
 import Navbar from "./components/Navbar";
 import Projects from "./components/Projects";
+import ProjectsCarousel from "./components/ProjectsCarousel";
 import Skills from "./components/Skills";
 
 export default function App() {
@@ -23,8 +24,9 @@ export default function App() {
         <About />
         <Skills />
         <Education />
+        <Experience />
         <Projects />
-        <Learning />
+        <ProjectsCarousel />
         <Contact />
       </main>
 
@@ -33,3 +35,4 @@ export default function App() {
     </div>
   );
 }
+

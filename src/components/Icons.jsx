@@ -141,6 +141,16 @@ export function TargetIcon({ className = "size-5", ...props }) {
   );
 }
 
+export function BriefcaseIcon({ className = "size-5", ...props }) {
+  return (
+    <Line className={className} {...props}>
+      <rect x="3" y="7.5" width="18" height="12.5" rx="2.5" />
+      <path d="M8.5 7.5V6a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v1.5" />
+      <path d="M3 12.5h18" />
+    </Line>
+  );
+}
+
 export function CodeIcon({ className = "size-5", ...props }) {
   return (
     <Line className={className} {...props}>

@@ -3,12 +3,9 @@ import Container from "./Container";
 import { GithubIcon, LinkedinIcon, MailIcon } from "./Icons";
 
 const TAGLINE =
-  "IT student and aspiring web developer, focused on building modern, accessible interfaces.";
+  "Thank you for visiting my portfolio website. Let's connect on socials — or message me anytime.";
 
-const CURRENT_YEAR = new Date().getFullYear();
-
-/* Site footer: brand, quick links, contact details, and a
-   dynamic copyright year. */
+/* Site footer: brand, quick links, contact details, and a design credit. */
 export default function Footer() {
   return (
     <footer className="border-t border-border bg-surface/40">
@@ -24,14 +21,11 @@ export default function Footer() {
                 {profile.initials}
               </span>
               <span className="flex flex-col leading-tight">
-                <span className="text-sm font-semibold">{profile.name}</span>
-                <span className="font-mono text-[11px] text-subtle">
-                  {profile.title}
-                </span>
+                <span className="text-[1.0625rem] font-semibold">{profile.name}</span>
               </span>
             </a>
 
-            <p className="mt-5 max-w-sm text-sm leading-relaxed text-muted">
+            <p className="mt-5 max-w-md text-[1rem] leading-relaxed text-muted">
               {TAGLINE}
             </p>
 
@@ -82,7 +76,7 @@ export default function Footer() {
                 <li key={item.href}>
                   <a
                     href={item.href}
-                    className="text-sm text-muted transition-colors duration-200 hover:text-foreground"
+                    className="text-[1rem] text-muted transition-colors duration-200 hover:text-foreground"
                   >
                     {item.label}
                   </a>
@@ -96,7 +90,7 @@ export default function Footer() {
             <h2 className="font-mono text-xs uppercase tracking-[0.18em] text-subtle">
               Get in touch
             </h2>
-            <ul className="mt-4 space-y-2.5 text-sm">
+            <ul className="mt-4 space-y-2.5 text-[1rem]">
               {profile.phone ? (
                 <li>
                   <a
@@ -129,11 +123,8 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col gap-3 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-subtle">
-            © {CURRENT_YEAR} {profile.name}. All rights reserved.
-          </p>
-          <p className="font-mono text-xs text-subtle">
-            Built with React · Vite · Tailwind CSS v4
+          <p className="text-[0.875rem] text-subtle">
+            Designed with 🤍 by {profile.name}
           </p>
         </div>
       </Container>

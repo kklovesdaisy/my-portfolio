@@ -20,7 +20,7 @@ function SkillTile({ item }) {
         className="size-8 transition-transform duration-300 ease-out-expo group-hover:-translate-y-0.5 group-hover:scale-110 sm:size-9"
         style={{ color: getTechColor(item.name) }}
       />
-      <span className="text-xs font-semibold text-muted transition-colors duration-300 group-hover:text-foreground sm:text-sm">
+      <span className="text-[0.9375rem] font-semibold text-muted transition-colors duration-300 group-hover:text-foreground sm:text-[1rem]">
         {item.name}
       </span>
     </Card>
@@ -50,18 +50,18 @@ export default function Skills() {
             </IconTile>
             <h2
               id="skills-heading"
-              className="text-3xl font-bold tracking-tight sm:text-4xl"
+              className="section-heading"
             >
               {skills.heading}
             </h2>
           </div>
 
-          <p className="mt-5 text-base leading-relaxed text-muted">
+          <p className="mt-5 text-[1.0625rem] leading-relaxed text-muted lg:text-[1.125rem]">
             {skills.intro}
           </p>
         </Reveal>
 
-        <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7">
+        <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-6 lg:gap-5 xl:grid-cols-7">
           {skills.items.map((item, index) => (
             <Reveal key={item.name} delay={(index % 7) * 60}>
               <SkillTile item={item} />
