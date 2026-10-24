@@ -320,9 +320,6 @@ export default function Hero() {
                         {profile.name}
                       </p>
                     </div>
-                    <span className="badge badge-blue shrink-0">
-                      Open to junior roles
-                    </span>
                   </div>
                 </div>
               </div>
